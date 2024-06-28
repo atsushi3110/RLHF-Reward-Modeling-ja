@@ -99,8 +99,17 @@ class ScriptArguments:
         metadata={"help": "Eval the model every x steps"},
     )
 
+try:
+    parser = HfArgumentParser(ScriptArguments)
+except:
+    print(ScriptArguments)
+    failed=True
+else:
+    failed=False
 
-parser = HfArgumentParser(ScriptArguments)
+assert not failed
+
+
 script_args = parser.parse_args_into_dataclasses()[0]
 
 # Load the value-head model and tokenizer.
@@ -124,7 +133,6 @@ tokenizer.model_max_length = script_args.max_length
 train_path = script_args.train_set_path
 eval_path = script_args.eval_set_path
 output_name = script_args.output_path
-
 
 def build_dataset(tokenizer, train_path, eval_path):
 
